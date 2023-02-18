@@ -109,6 +109,7 @@ if __name__ == '__main__':
     mac = configManager.runtimeConfig.arg["MAC"]
     HOST_HTTP_PORT = configManager.runtimeConfig.arg["HTTP_PORT"]
     HOST_HTTPS_PORT = configManager.runtimeConfig.arg["HTTPS_PORT"]
+    BROADCAST_PORT = configManager.runtimeConfig.arg["BROADCAST_PORT"]
     CONFIG_PATH = configManager.runtimeConfig.arg["CONFIG_PATH"]
     DISABLE_HTTPS = configManager.runtimeConfig.arg["noServeHttps"]
 
@@ -124,9 +125,9 @@ if __name__ == '__main__':
         Thread(target=remoteDiscover.runRemoteDiscover, args=[bridgeConfig["config"]]).start()
     Thread(target=remoteApi.runRemoteApi, args=[BIND_IP, bridgeConfig["config"]]).start()
     Thread(target=stateFetch.syncWithLights, args=[False]).start()
-    Thread(target=ssdp.ssdpSearch, args=[HOST_IP, HOST_HTTP_PORT, mac]).start()
-    Thread(target=ssdp.ssdpBroadcast, args=[HOST_IP, HOST_HTTP_PORT, mac]).start()
-    Thread(target=mdns.mdnsListener, args=[HOST_IP, HOST_HTTP_PORT, "BSB002", bridgeConfig["config"]["bridgeid"]]).start()
+    Thread(target=ssdp.ssdpSearch, args=[HOST_IP, BROADCAST_PORT, mac]).start()
+    Thread(target=ssdp.ssdpBroadcast, args=[HOST_IP, BROADCAST_PORT, mac]).start()
+    Thread(target=mdns.mdnsListener, args=[HOST_IP, BROADCAST_PORT, "BSB002", bridgeConfig["config"]["bridgeid"]]).start()
     Thread(target=scheduler.runScheduler).start()
     Thread(target=eventStreamer.messageBroker).start()
     if not DISABLE_HTTPS:

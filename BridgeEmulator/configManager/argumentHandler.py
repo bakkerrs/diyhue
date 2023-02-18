@@ -34,7 +34,7 @@ def process_arguments(configDir, args):
 
 
 def parse_arguments():
-    argumentDict = {"BIND_IP": '', "HOST_IP": '', "HTTP_PORT": '', "HTTPS_PORT": '', "FULLMAC": '', "MAC": '', "DEBUG": False, "DOCKER": False,
+    argumentDict = {"BIND_IP": '', "HOST_IP": '', "HTTP_PORT": '', "HTTPS_PORT": '', "BROADCAST_PORT": '', "FULLMAC": '', "MAC": '', "DEBUG": False, "DOCKER": False,
                     "IP_RANGE_START": '', "IP_RANGE_END": '', "DECONZ": '', "scanOnHostIP": False, "disableOnlineDiscover": '', "noLinkButton": False, "noServeHttps": False}
     ap = argparse.ArgumentParser()
 
@@ -111,6 +111,13 @@ def parse_arguments():
     argumentDict["HTTPS_PORT"] = host_https_port
 
     logging.info("Using Host %s:%s" % (host_ip, host_http_port))
+
+    if get_environment_variable('BROADCAST_PORT'):
+        broadcast_port = int(get_environment_variable('BROADCAST_PORT'))
+    else:
+        broadcast_port = 80
+    argumentDict["BROADCAST_PORT"] = broadcast_port
+
 
     if args.mac:
         dockerMAC = args.mac  # keeps : for cert generation
